@@ -10,12 +10,13 @@ jobs:
     name: ui-image-build & push to acr  #display name
     runs-on: ubuntu-latest      #agent
     steps:
-      - name: Checkout       #git checkout
+      - name: Checkout      #git checkout
         uses: actions/checkout@v6.0.0      
       - name: ui-image build
-        run: docker build -t todo-ui-service:v2 . # docker build -t <image name:tag> .
+        run: docker build -t todo-ui-service:v2 . 
+		# docker build -t <image name:tag> .
       - name: Azure Login
-        uses: Azure/login@v2.3.0  
+        uses: Azure/login@v2.3.0
 		#az service pricple login#secret
 		#app registration- subscription level-contributor access 
 		#acr -Container Registry Repository Contributor
@@ -28,6 +29,6 @@ jobs:
       - name: ui-image tag to acr
         run: docker tag todo-ui-service:v1 todoappconatinerregistry.azurecr.io/todo-ui-service:v2 
             #docker tag <image name:tag> <Login server url>/<image name:tag> 
-      - name: push to acr
+      - name: ui-image push to acr
         run: docker push todoappconatinerregistry.azurecr.io/todo-ui-service:v2
-		    #docker tag  <Login server url>/<image name:tag> 
+		    #docker push  <Login server url>/<image name:tag> 
