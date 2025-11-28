@@ -25,6 +25,6 @@ jobs:
       - name: acr login
         run: az acr login --name todoappconatinerregistry
       - name: tag to acr
-        run: docker tag todo-ui-service:v1 todoappconatinerregistry.azurecr.io/todo-ui-service:v2        
+        run: docker tag todo-ui-service:v2 todoappconatinerregistry.azurecr.io/todo-ui-service:v2        
       - name: push to acr
         run: docker push todoappconatinerregistry.azurecr.io/todo-ui-service:v2
