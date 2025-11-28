@@ -12,14 +12,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6.0.0      
       - name: image build
-        run: docker build -t todo007.azurecr.io/todo-ui:v1 .
+        run: docker build -t todo-ui-service:v2 .
       - name: Azure Login
         uses: Azure/login@v2.3.0
         with:
-          client-id: "e8c830a1-d750-4619-a0d0-822aa45f1086"
-          tenant-id: "5c09c46b-8034-4002-8418-77ce48be97db"
-          subscription-id: "b4461466-1e6b-4be2-bb70-1e96a72a41c8"
+          client-id: "bb540dfb-476d-42f3-bc09-65d03f6ea924"
+          tenant-id: "5d1f5558-c771-40e9-a1f2-57920ed020d2"
+          subscription-id: "e5efa2cd-02a5-4c7b-be99-6e2ae6d5feac"
       - name: acr login
-        run: az acr login --name todo007
+        run: az acr login --name todoappconatinerregistry
+      - name: tag to acr
+        run: docker tag todo-ui-service:v1 todoappconatinerregistry.azurecr.io/todo-ui-service:v2        
       - name: push to acr
-        run: docker push todo007.azurecr.io/todo-ui:v1
+        run: docker push todoappconatinerregistry.azurecr.io/todo-ui-service:v2
