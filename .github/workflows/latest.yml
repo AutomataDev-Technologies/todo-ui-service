@@ -1,34 +1,36 @@
 name: uiimagebuildAndPush
-on:                       #trigger
+
+on:
   workflow_dispatch:
+
 permissions:
   id-token: write
   contents: read
-  
+
 jobs:
   buildAndPush:
-    name: ui-image-build & push to acr  #display name
-    runs-on: ubuntu-latest      #agent
+    name: ui-image-build & push to acr
+    runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout      #git checkout
-        uses: actions/checkout@v6.0.0      
-      - name: ui-image build
-        run: docker build -t todo-ui-service:v2 . 
-		# docker build -t <image name:tag> .
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Build UI Image
+        run: docker build -t todo-ui-service:v2 .
+
       - name: Azure Login
         uses: Azure/login@v2.3.0
-		#az service pricple login#secret
-		#app registration- subscription level-contributor access 
-		#acr -Container Registry Repository Contributor
         with:
           client-id: "bb540dfb-476d-42f3-bc09-65d03f6ea924"
           tenant-id: "5d1f5558-c771-40e9-a1f2-57920ed020d2"
           subscription-id: "e5efa2cd-02a5-4c7b-be99-6e2ae6d5feac"
-      - name: acr login
-        run: az acr login --name todoappconatinerregistry #<acr-registry name>
-      - name: ui-image tag to acr
-        run: docker tag todo-ui-service:v1 todoappconatinerregistry.azurecr.io/todo-ui-service:v2 
-            #docker tag <image name:tag> <Login server url>/<image name:tag> 
-      - name: ui-image push to acr
-        run: docker push todoappconatinerregistry.azurecr.io/todo-ui-service:v2
-		    #docker push  <Login server url>/<image name:tag> 
+
+      - name: ACR login
+        run: az acr login --name todoappcontainerregistry
+
+      - name: Tag UI image
+        run: docker tag todo-ui-service:v2 todoappcontainerregistry.azurecr.io/todo-ui-service:v2
+
+      - name: Push UI image to acr
+        run: docker push todoappcontainerregistry.azurecr.io/todo-ui-service:v2
