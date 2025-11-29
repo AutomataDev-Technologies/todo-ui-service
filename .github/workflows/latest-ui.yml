@@ -1,0 +1,30 @@
+name: buildAndPush
+on:
+  workflow_dispatch:
+permissions:
+  id-token: write
+  contents: read
+jobs:
+  buildAndPush:
+    name: build and push to acr
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.0      
+      - name: image build
+        run: docker build -t todo-ui-service:v2 .
+      - name: Azure Login
+        uses: Azure/login@v2.3.0
+        with:
+          # client-id: "bb540dfb-476d-42f3-bc09-65d03f6ea924"
+          # tenant-id: "5d1f5558-c771-40e9-a1f2-57920ed020d2"
+          # subscription-id: "e5efa2cd-02a5-4c7b-be99-6e2ae6d5feac"
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: acr login
+        run: az acr login --name todoappconatinerregistry
+      - name: tag to acr
+        run: docker tag todo-ui-service:v2 todoappconatinerregistry.azurecr.io/todo-ui-service:v2        
+      - name: push to acr
+        run: docker push todoappconatinerregistry.azurecr.io/todo-ui-service:v2
